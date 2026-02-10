@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FantaVal</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    overflow: hidden;
+    background: pink;
+  }
+
+  .slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: white;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slide img {
+    max-width: 300px;
+    border-radius: 15px;
+    margin: 20px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .buttons {
+    margin-top: 30px;
+  }
+
+  .buttons button {
+    padding: 15px 30px;
+    font-size: 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .buttons button:hover {
+    transform: scale(1.2);
+  }
+
+  .confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+<!-- Valentine Question Slide -->
+<div class="slide" id="slideQuestion" style="display:flex; background: linear-gradient(to right, #a18cd1, #fbc2eb);">
+  <h1 style="font-size: 50px;">Dear Pookie 💕 Pie, Will You Be My Val Val?</h1>
+  <img src="fanta.jpg" alt="Fanta">
+  <h2 style="font-size:40px;">Will You Be My Valentine? 🌹</h2>
+  <div class="buttons">
+    <button onclick="handleAnswer(true)" style="background-color:#ff69b4;">Yes 💕</button>
+    <button onclick="handleAnswer(false)" style="background-color:#ff6347;">No 😢</button>
+  </div>
+</div>
+
+<!-- Celebration Slide -->
+<div class="slide" id="celebrate" style="display:flex; background: linear-gradient(to right, #fddb92, #d1fdff);">
+  <h1 style="font-size: 60px;">Yay! 💖 You Said Yes! 💐</h1>
+  <img src="fanta.jpg" alt="Fanta">
+</div>
+
+<!-- Try Again Slide -->
+<div class="slide" id="tryAgain" style="display:flex; background: linear-gradient(to right, #ff758c, #ff7eb3);">
+  <h1 style="font-size: 50px;">Hmm... I know you slipped 😜</h1>
+  <button onclick="goToSlide('slideQuestion')" style="padding: 15px 30px; font-size: 20px; border-radius: 10px; background:#ff69b4;">Try Again 💌</button>
+</div>
+
+<!-- Confetti canvas -->
+<canvas class="confetti" id="confetti"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+function goToSlide(slideId) {
+  document.querySelectorAll('.slide').forEach(slide => slide.style.display = 'none');
+  document.getElementById(slideId).style.display = 'flex';
+}
+
+function handleAnswer(isYes) {
+  if(isYes){
+    goToSlide('celebrate');
+    launchConfetti();
+  } else {
+    goToSlide('tryAgain');
+  }
+}
+
+// Confetti animation
+function launchConfetti() {
+  const duration = 5 * 1000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 5,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 }
+    });
+    confetti({
+      particleCount: 5,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 }
+    });
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  }());
+}
+
+// Show the Valentine question slide on load
+window.onload = () => {
+  goToSlide('slideQuestion');
+};
+</script>
+
+</body>
+</html>
